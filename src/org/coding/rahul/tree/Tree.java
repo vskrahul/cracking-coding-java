@@ -4,29 +4,32 @@ public class Tree<V extends Comparable<V>> {
 
 	Tree.Node<V> root;
 	
-	public static final String RIGHT_CHILD = "RIGHT";
-	
-	public static final String LEFT_CHILD = "LEFT";
-	
-	static final class Node<V> implements Comparable<V>{
+	static final class Node<V> implements Comparable<V> {
 		Node<V> parent;
 		Node<V> left;
 		Node<V> right;
 		V value;
 		String childType;
 		
-		Node(V value) {
-			this.value = value;
+		Node() {
+			
 		}
 		
-		void setLeft(Node<V> node) {
-			this.left = node;
+		Node<V> value(V v) {
+			this.value = v;
+			return this;
 		}
 		
-		void setRight(Node<V> node) {
+		Node<V> right(Node<V> node) {
 			this.right = node;
+			return this;
 		}
 
+		Node<V> left(Node<V> node) {
+			this.right = node;
+			return this;
+		}
+		
 		@Override
 		public int compareTo(V v) {
 			return 0;
@@ -37,7 +40,7 @@ public class Tree<V extends Comparable<V>> {
 		return this.root;
 	}
 	
-	public void setRoot(Node<V> root){
+	public void root(Node<V> root){
 		this.root = root;
 	}
 }

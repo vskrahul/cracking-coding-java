@@ -1,44 +1,28 @@
 package org.coding.rahul.tree;
 
-import org.coding.rahul.tree.Tree.Node;
-
 public class Main {
 
 	public static void main(String[] args) {
-		BinaryTree<Integer> t = new BinaryTree<Integer>();
+		BinaryTree<Integer> tree = new BinaryTree<Integer>();
 		
-		Node<Integer> root = new Node<Integer>(100);
+		BinaryTree.Node<Integer> root = new BinaryTree.Node<Integer>().value(10);
 		
-		t.setRoot(root);
+		tree.root(root);
 		
-		t.insert(50);
-		t.insert(30);
-		t.insert(20);
-		t.insert(10);
-		t.insert(25);
-		t.insert(40);
+		tree.insert(5);
+		tree.insert(4);
+		tree.insert(8);
+		tree.insert(6);
+		tree.insert(7);
+		tree.insert(9);
 		
-		t.insert(35);
-		t.insert(45);
+		tree.insert(11);
+		tree.insert(12);
+		tree.insert(13);
+		tree.insert(14);
+		tree.insert(15);
 		
-		t.insert(80);
-		t.insert(70);
-		
-		t.insert(60);
-		t.insert(65);
-		
-		t.insert(90);
-		t.insert(85);
-		t.insert(81);
-		t.insert(88);
-		t.insert(95);
-		
-		t.insert(200);
-		
-		t.printPreOrder(root);
-		t.delete(80);
-		System.out.println("**************************");
-		t.printPreOrder(root);
-		
+		tree.pre_order(root);
+		System.out.println(String.format("Hegith = %d", tree.height(tree.root)));
 	}
 }

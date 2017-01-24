@@ -1,41 +1,17 @@
 package org.coding.rahul.tree;
 
-import org.coding.rahul.tree.exception.BinaryException;
+import java.util.Objects;
 
 public class BinaryTree<V extends Comparable<V>> extends Tree<V> {
 
-	public boolean insert(V value) {
-		if(value == null)
-			return false;
+	public void insert(V value) {
+		Objects.requireNonNull(value, "null is not allowed.");
 		
-		if(this.root == null){
-			this.root = new Node<V>(value);
-			return true;
-		}
-		
-		Node<V> parent = null;
-		
-		try{
-			parent = findParent(this.root, value);
-		} catch(BinaryException e) {
-			return false;
-		}
-		
-		Node<V> node = new Node<V>(value);
-		
-		if(value.compareTo(parent.value) > 0) {
-			parent.right = node;
-			node.childType = Tree.RIGHT_CHILD;
+		if(Objects.isNull(root)){
+			new Node<V>().value(value);
 		} else {
-			if(value.compareTo(parent.value) < 0) {
-				parent.left = node;
-				node.childType = Tree.LEFT_CHILD;
-			}
+			add(this.root, value);
 		}
-		
-		node.parent = parent;
-		
-		return true;
 	}
 	
 	private boolean delete(V value, Node<V> p) {
@@ -58,13 +34,13 @@ public class BinaryTree<V extends Comparable<V>> extends Tree<V> {
 				/**
 				 * Deleting node has right subtree
 				 */
-				if(!hasChild(deletingNode)){
+				if(!child(deletingNode)){
 					deletingNode.parent = null;
 					return true;
 				}
 				
 				if(deletingNode.right == null) {
-					replacedBy =  findLeftMostLeaf(deletingNode);
+					replacedBy =  find_left_most_leaf(deletingNode);
 					swipe(deletingNode, replacedBy, 1);
 				} else {
 					if(deletingNode.left == null) {
@@ -76,7 +52,7 @@ public class BinaryTree<V extends Comparable<V>> extends Tree<V> {
 							swipe(deletingNode, replacedBy, 3);
 						} else {
 							if(deletingNode.right.left != null) {
-								replacedBy = findLeftMostLeaf(deletingNode.right);
+								replacedBy = find_left_most_leaf(deletingNode.right);
 								swipe(deletingNode, replacedBy, 4);
 							}
 						}
@@ -127,13 +103,13 @@ public class BinaryTree<V extends Comparable<V>> extends Tree<V> {
 		}
 	}
 	
-	private boolean hasChild(Node<V> node) {
+	private boolean child(Node<V> node) {
 		return node.left != null || node.right != null;
 	}
 	
-	private Node<V> findLeftMostLeaf(Node<V> node) {
+	private Node<V> find_left_most_leaf(Node<V> node) {
 		if(node.left != null)
-			return findLeftMostLeaf(node.left);
+			return find_left_most_leaf(node.left);
 		return node;
 	}
 	
@@ -145,61 +121,61 @@ public class BinaryTree<V extends Comparable<V>> extends Tree<V> {
 		return null;
 	}
 	
-	public V getRandom(V value) {
+	public V random(V value) {
 		return null;
 	}
 	
-	private Node<V> findParent(Node<V> parent, V value) {
+	private void add(Node<V> parent, V value) {
 		
-		if(parent == null)
-			return null;
+		if(Objects.isNull(parent))
+			return;
 		
 		if(value.compareTo(parent.value) > 0) {
-			if(parent.right == null){
-				return parent;
+			if(Objects.isNull(parent.right)){
+				Node<V> node = new Node<V>().value(value);
+				parent.right = node;
+				node.parent = parent;
 			} else {
-				parent = parent.right;
+				add(parent.right, value);
 			}
 		} else {
 			if(value.compareTo(parent.value) < 0) {
-				if(parent.value == value) {
-					/**
-					 * Node is already exists with given @param : value
-					 */
-					throw new BinaryException("Node of this value is already exists in this tree");
-				}
 				if(parent.left == null) {
-					return parent;
+					Node<V> node = new Node<V>().value(value);
+					parent.left = node;
+					node.parent = parent;
 				} else {
-					parent = parent.left;
+					add(parent.left, value);
 				}
 			}
 		}
-		return findParent(parent, value);
 	}
 	
-	public void printPreOrder(Node<V> node) {
+	public void pre_order(Node<V> node) {
 		if(node != null) {
-			System.out.println(node.value);
-			printPreOrder(node.left);
-			printPreOrder(node.right);
+			System.out.print(String.format("[ %s ]--", node.value));
+			pre_order(node.left);
+			pre_order(node.right);
 		}
 	}
 	
-	private Node<V> getSibling(Node<V> node) {
-		if(node == null) {
+	public int height(Node<V> root) {
+		if(Objects.isNull(root) || (Objects.isNull(root.left) && Objects.isNull(root.right))) {
+			return 0;
+		}
+		int hl = 1 + height(root.left);
+		int hr = 1 + height(root.right);
+		return 1 + hl > hr ? hl : hr;
+	}
+	
+	@SuppressWarnings("unused")
+	private Node<V> sibling(Node<V> node) {
+		if(Objects.isNull(node) || Objects.isNull(node.parent)) {
 			return null;
 		}
-		if(node.parent == null) {
-			/**
-			 * this is a root node
-			 */
-			return null;
-		}
-		if(node.childType == Tree.LEFT_CHILD)
+		if(node.value.compareTo(node.parent.value) < 0)
 			return node.parent.right;
-		if(node.childType == Tree.RIGHT_CHILD)
+		else
 			return node.parent.left;
-		return null;
 	}
 }
