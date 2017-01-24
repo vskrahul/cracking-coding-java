@@ -23,6 +23,8 @@ public class Main {
 		tree.insert(15);
 		
 		tree.pre_order(root);
-		System.out.println(String.format("Hegith = %d", tree.height(tree.root)));
+		System.out.println(String.format("\nHegith = %d", tree.height(tree.root)));
+		tree.top_view(root);
+		tree.level_order(root);
 	}
 }

@@ -15,6 +15,10 @@ public class Tree<V extends Comparable<V>> {
 			
 		}
 		
+		public String toString() {
+			return value.toString();
+		};
+		
 		Node<V> value(V v) {
 			this.value = v;
 			return this;

@@ -1,6 +1,10 @@
 package org.coding.rahul.tree;
 
+import java.util.LinkedList;
 import java.util.Objects;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class BinaryTree<V extends Comparable<V>> extends Tree<V> {
 
@@ -159,6 +163,22 @@ public class BinaryTree<V extends Comparable<V>> extends Tree<V> {
 		}
 	}
 	
+	public void level_order(Node<V> root) {
+		
+		Queue<Node<V>> queue = new LinkedList<>();
+		
+		queue.add(root);
+		System.out.print("\n");
+		while(!queue.isEmpty()) {
+			Node<V> n = queue.poll();
+			if(!Objects.isNull(n)) {
+				System.out.print(String.format("%s ", n.value));
+				if(!Objects.isNull(n.left)) queue.add(n.left);
+				if(!Objects.isNull(n.right)) queue.add(n.right);
+			}
+		}
+	}
+	
 	public int height(Node<V> root) {
 		if(Objects.isNull(root) || (Objects.isNull(root.left) && Objects.isNull(root.right))) {
 			return 0;
@@ -168,7 +188,26 @@ public class BinaryTree<V extends Comparable<V>> extends Tree<V> {
 		return 1 + hl > hr ? hl : hr;
 	}
 	
-	@SuppressWarnings("unused")
+	public void top_view(Node<V> root) {
+		left_top_view(root);
+		right_top_view(root.right);
+	}
+	
+	public void left_top_view(Node<V> root) {
+		if(!Objects.isNull(root)){
+			left_top_view(root.left);
+			System.out.print(String.format("%s -> ", root.value));
+		}
+	}
+	
+	public void right_top_view(Node<V> root) {
+		if(!Objects.isNull(root)){
+			System.out.print(String.format("%s -> ", root.value));
+			right_top_view(root.right);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
 	private Node<V> sibling(Node<V> node) {
 		if(Objects.isNull(node) || Objects.isNull(node.parent)) {
 			return null;
